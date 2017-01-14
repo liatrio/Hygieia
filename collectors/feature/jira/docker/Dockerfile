@@ -1,18 +1,15 @@
-
 FROM docker.io/java:openjdk-8-jdk
 
-MAINTAINER Hygieia@capitalone.com
+MAINTAINER cloudservices@liatrio.com
 
 RUN \
-
-  mkdir  /hygieia
+  mkdir /hygieia
 
 COPY *.jar /hygieia/
-COPY jira-properties-builder.sh /hygieia/
 
-WORKDIR /hygieia/
+WORKDIR /hygieia
 
 VOLUME ["/hygieia/logs"]
+VOLUME ["/hygieia/properties"]
 
-CMD ./jira-properties-builder.sh &&\
-	 java -jar jira-feature-collector*.jar --spring.config.location=hygieia-jira-feature-collector.properties
+CMD java -jar jira-feature-collector*.jar --spring.config.location=/hygieia/properties/dashboard.properties
