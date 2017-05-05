@@ -27,6 +27,25 @@ dbusername=${SPRING_DATA_MONGODB_USERNAME:-db}
 #Database Password - default is blank
 dbpassword=${SPRING_DATA_MONGODB_PASSWORD:-dbpass}
 
+corsEnabled=${CORS_ENABLED:-false}
+
+corsWhitelist=${CORS_WHITELIST:-http://domain1.com:port,http://domain2.com:port}
+
 feature.dynamicPipeline=${FEATURE_DYNAMIC_PIPELINE:-disabled}
-systemConfig.multipleDeploymentServers=${CONFIG_GLOBAL_MULTIPLE_DEPLOYMENT_SERVERS:-false}
+
+#Authentication Settings
+auth.expirationTime=${AUTH_EXPIRATION_TIME:-}
+auth.secret=${AUTH_SECRET:-}
+auth.ldapServerUrl=${AUTH_LDAP_SERVER_URL:-}
+auth.ldapUserDnPattern=${AUTH_LDAP_USER_DN_PATTERN:-}
+
+#Monitor Widget proxy credentials
+monitor.proxy.username=${MONITOR_PROXY_USERNAME:-}
+monitor.proxy.password=${MONITOR_PROXY_PASSWORD:-}
+
+#Monitor Widget proxy information
+monitor.proxy.type=${MONITOR_PROXY_TYPE:-http}
+monitor.proxy.host=${MONITOR_PROXY_HOST:-}
+monitor.proxy.port=${MONITOR_PROXY_PORT:-80}
+
 EOF
