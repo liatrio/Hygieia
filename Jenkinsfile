@@ -2,6 +2,9 @@ pipeline {
     agent none
     stages {
        stage('Build') {
+           environment {
+             HOME = '.'
+           }
            agent {
                docker {
                    image 'maven:3.5.0'
@@ -11,7 +14,7 @@ pipeline {
            steps {
                configFileProvider(
                        [configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
-                   sh 'mvn -s $MAVEN_SETTINGS clean install -DskipTests=true -B'
+                   sh 'mvn -s $MAVEN_SETTINGS clean install package -DskipTests=true -B'
                }
            }
        }
