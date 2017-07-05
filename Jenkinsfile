@@ -1,17 +1,6 @@
 pipeline {
     agent none
     stages {
-       stage('Build Downstream Containers') {
-         agent {
-             docker {
-                 image 'maven:3.5.0'
-                 args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
-             }
-         }
-         steps {
-           sh 'mvn docker:build'
-         }
-       }
        stage('Build') {
            environment {
              HOME = '.'
@@ -28,6 +17,17 @@ pipeline {
                    sh 'mvn -s $MAVEN_SETTINGS clean deploy -DskipTests=true -B'
                }
            }
+       }
+       stage('Build Downstream Containers') {
+         agent {
+             docker {
+                 image 'maven:3.5.0'
+                 args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
+             }
+         }
+         steps {
+           sh 'mvn docker:build'
+         }
        }
    }
 }
