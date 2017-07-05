@@ -2,10 +2,13 @@ pipeline {
     agent none
     stages {
        stage('Build') {
+           environment {
+             npm_config_cache = 'npm-cache'
+           }
            agent {
                docker {
                    image 'maven:3.5.0'
-                   args '-u root -e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
+                   args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
                }
            }
            steps {
