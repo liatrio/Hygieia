@@ -9,9 +9,6 @@ pipeline {
                    args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
                }
            }
-           environment {
-             HOME = '.'
-           }
            steps {
                configFileProvider(
                        [configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
