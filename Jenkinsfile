@@ -18,7 +18,7 @@ pipeline {
                }
            }
        }
-       stage('Build Downstream Containers') {
+/*       stage('Build Downstream Containers') {
          agent {
              docker {
                  image 'maven:3.5.0'
@@ -26,11 +26,11 @@ pipeline {
              }
          }
          steps {
-    withCredentials([file(usernameVariable: 'jeff', passwordVariable: '3208')]) {
+    withCredentials([file(usernameVariable: ${INITIAL_ADMIN_USER}, passwordVariable: ${INITIAL_ADMIN_PASSWORD})]) {
            sh 'mvn docker:build'
 	}
          }
-       }
+       }*/
    }
 }
 
