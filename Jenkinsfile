@@ -44,7 +44,7 @@ pipeline {
          agent any
          steps {
            sh 'docker run -d -p 27017:27017 -d --network=${LDOP_NETWORK_NAME} -v /root//mongo/data/db mongo:latest  mongod --smallfiles'
-           sh 'docker run -t -p 8080:8081 --link mongodb:mongo -v /root/logs/hygieia/logs -i hygieia-api:latest'
+           sh 'docker run -t -p 8081:8080 --link mongodb:mongo -v /root/logs/hygieia/logs -i hygieia-api:latest'
            //sh 'mongo < mongosrc.js'
          }
        }
