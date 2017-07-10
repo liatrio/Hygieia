@@ -29,6 +29,7 @@ pipeline {
            sh '/opt/sonar-runner-2.4/bin/sonar-runner -D sonar.login=${SONAR_ACCOUNT_LOGIN} -D sonar.password=${SONAR_ACCOUNT_PASSWORD} -D sonar.jdbc.url=${SONAR_DB_URL} -D sonar.jdbc.username=${SONAR_DB_LOGIN} -D sonar.jdbc.password=${SONAR_DB_PASSWORD}'
          }
        }
+       /*
        stage('run mongo container') {
          agent any
          steps {
@@ -37,7 +38,8 @@ pipeline {
            //sh 'mongo < mongosrc.js'
          }
        }
-/*       stage('Build Downstream Containers') {
+       */
+       stage('Build Selenium') {
          agent {
              docker {
                  image 'liatrio/selenium-firefox'
@@ -47,7 +49,7 @@ pipeline {
          steps {
            sh 'echo running Selenium'
          }
-       }*/
+       }
    }
 }
 
