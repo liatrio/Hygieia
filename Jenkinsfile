@@ -50,7 +50,7 @@ pipeline {
          }
        }
        */
-       stage('Build Downstream Containers') {
+       stage('Build Selenium') {
          agent {
              docker {
                  image 'liatrio/selenium-firefox'
