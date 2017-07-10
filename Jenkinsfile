@@ -18,7 +18,7 @@ pipeline {
                }
            }
        }
-/*       stage('Build Downstream Containers') {
+       stage('Build Downstream Containers') {
          agent {
              docker {
                  image 'maven:3.5.0'
@@ -26,9 +26,9 @@ pipeline {
              }
          }
          steps {
-           sh 'echo \'hello world\''
+           sh 'mvn docker:build'
          }
-       }*/
+       }
        stage('Run Sonar scanner') {
          agent {
              docker {
