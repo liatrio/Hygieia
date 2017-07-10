@@ -18,17 +18,6 @@ pipeline {
                }
            }
        }
-       stage('Build Downstream Containers') {
-         agent {
-             docker {
-                 image 'maven:3.5.0'
-                 args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
-             }
-         }
-         steps {
-           sh 'mvn -e docker:build'
-         }
-       }
        stage('Run Sonar scanner') {
          agent {
              docker {
