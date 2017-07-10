@@ -26,7 +26,7 @@ pipeline {
              }
          }
          steps {
-           sh 'mvn docker:build'
+           sh 'mvn -e docker:build'
          }
        }
        stage('Run Sonar scanner') {
