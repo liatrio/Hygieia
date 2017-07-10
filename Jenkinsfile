@@ -15,6 +15,7 @@ pipeline {
                configFileProvider(
                        [configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
                    sh 'mvn -s $MAVEN_SETTINGS -e clean deploy -DskipTests=true -B'
+				   sh 'mvn -s $MAVEN_SETTINGS -e docker:build'
                }
            }
        }
