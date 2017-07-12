@@ -19,10 +19,14 @@ hygieia-api:
 hygieia-ui:
   image: hygieia-ui:latest
   container_name: hygieia-ui
+  environment: 
+  - "API_HOST=hygieia-api"
+  - "API_PORT=8080"
   ports:
   - "8088:80"
   links:
   - hygieia-api
+  - mongodb:mongo
 
 
 hygieia-github-scm-collector:
