@@ -18,6 +18,23 @@ pipeline {
                }
            }
        }
+       stage('Build-Docker-Containers') {
+           environment {
+             HOME = '.'
+           }
+           agent {
+               docker {
+                   image 'maven:3.5.0'
+                   args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
+               }
+           }
+           steps {
+               configFileProvider(
+                       [configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
+                   sh 'mvn -s $MAVEN_SETTINGS -e docker:build'
+               }
+           }
+       }
        stage('Run Sonar scanner') {
          agent {
              docker {
@@ -39,17 +56,6 @@ pipeline {
          }
        }
        */
-       stage('Build Selenium') {
-         agent {
-             docker {
-                 image 'liatrio/selenium-firefox'
-                 args '--network=${LDOP_NETWORK_NAME}'
-             }
-         }
-         steps {
-           sh 'echo running Selenium'
-         }
-       }
    }
 }
 
