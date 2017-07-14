@@ -18,7 +18,7 @@ pipeline {
            }
        }
      }
-    stage {
+     stage ('Build Containers') {
       agent any
       steps {
         sh 'mvn -s $MAVEN_SETTINGS docker:build'
