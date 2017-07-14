@@ -1,27 +1,36 @@
 pipeline {
-    agent none
-    stages {
-      stage('Build') {
-        environment {
-          HOME = '.'
+  agent none
+  stages {
+    stage('Build') {
+      environment {
+        HOME = '.'
+      }
+      agent {
+        docker {
+          image 'maven:3.5.0'
+            args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
         }
-        agent {
-          docker {
-            image 'maven:3.5.0'
-              args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
-          }
-        }
-        steps {
-          configFileProvider(
-            [configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
-              sh 'mvn -s $MAVEN_SETTINGS clean deploy package -DskipTests=true -B'
-           }
-       }
-     }
-     stage ('Build Containers') {
-      agent any
+      }
       steps {
-        sh 'mvn -s $MAVEN_SETTINGS docker:build'
+        configFileProvider([configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
+          sh 'mvn -s $MAVEN_SETTINGS clean deploy package -DskipTests=true -B'
+        }
+      }
+    }
+    stage('Build') {
+      environment {
+        HOME = '.'
+      }
+      agent {
+        docker {
+          image 'maven:3.5.0'
+            args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
+        }
+      }
+      steps {
+        configFileProvider([configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
+          sh 'mvn -s $MAVEN_SETTINGS docker:build'
+        }
       }
     }
      /*
