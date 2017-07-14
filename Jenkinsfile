@@ -17,7 +17,7 @@ pipeline {
         }
       }
     }
-    stage('Build') {
+    stage('Build Containers') {
       environment {
         HOME = '.'
       }
