@@ -7,8 +7,8 @@ pipeline {
       }
       agent {
         docker {
-          image 'maven:3.5.0'
-            args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
+          image 'maven-docker-build:latest'
+            args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD -v /var/run/docker.sock:/var/run/docker.sock -u maven:staff --network=${LDOP_NETWORK_NAME}'
         }
       }
       steps {
@@ -17,6 +17,19 @@ pipeline {
           sh 'mvn -s $MAVEN_SETTINGS docker:build'
         }
       }
+    }
+    stage('Docker Compose'){
+      agent any 
+      steps {
+        sh 'docker-compose up -d'
+      }
+    }
+    stage('Add database user') {
+      agent any
+      steps {
+        sh 'docker cp dbusr.sh mongodb:/'
+        sh 'docker exec -t mongodb bin/bash -c /dbusr.sh'
+      } 
     }
      /*
        stage('Build') {
