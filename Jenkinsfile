@@ -18,6 +18,12 @@ pipeline {
            }
        }
      }
+    stage {
+      agent any
+      step {
+        sh 'mvn -s $MAVEN_SETTINGS docker:build'
+      }
+    }
      /*
        stage('Build') {
            environment {
