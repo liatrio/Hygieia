@@ -13,13 +13,28 @@ pipeline {
       }
       agent {
         docker {
+          image 'maven:3.5.0'
+            args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
+        }
+      }
+      steps {
+        configFileProvider([configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
+          sh 'mvn -s $MAVEN_SETTINGS clean deploy package -DskipTests=true -B'
+        }
+      }
+    }
+    stage('Build Docker Images') {
+      environment {
+        HOME = '.'
+      }
+      agent {
+        docker {
           image 'maven-docker-build:latest'
             args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD -v /var/run/docker.sock:/var/run/docker.sock -u maven:staff --network=${LDOP_NETWORK_NAME}'
         }
       }
       steps {
         configFileProvider([configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
-          sh 'mvn -s $MAVEN_SETTINGS clean deploy package -DskipTests=true -B'
           sh 'mvn -s $MAVEN_SETTINGS docker:build'
         }
       }
@@ -36,13 +51,17 @@ pipeline {
       }
     }
     stage('Docker Compose'){
-      agent any 
+      agent {
+        label 'swarm'
+      }
       steps {
         sh 'docker-compose up -d'
       }
     }
     stage('Add database user') {
-      agent any
+      agent {
+        label 'swarm'
+      }
       steps {
         sh 'docker cp dbusr.sh mongodb:/'
         sh 'docker exec -t mongodb bin/bash -c /dbusr.sh'
